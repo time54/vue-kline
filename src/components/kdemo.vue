@@ -1,19 +1,18 @@
 <template>
-  <div>
-    <div id="echartContainer" ref="echartContainer" style="width:100%; height:400px"></div>
+  <div class="kdemo-page">
+    <div id="echartContainer" ref="echartContainer"></div>
   </div>
 </template>
 
 <script>
 /* eslint-disable */
-var echarts = require("echarts");
 
 export default {
   name: 'kdemo',
   data() {
     return { // 数据模型
-      //模型 time      open    close    min     max     vol    tag    macd    dif    dea
-      //['2015-10-19', 18.56,  18.25,   18.19,  18.56,  55.00, 0,     -0.00,  0.08,  0.09]
+      //模型 time      open    close    lowest  highest     vol    tag    macd    dif    dea
+      //['2015-10-19', 18.56,  18.25,   18.19,  18.56,     55.00,  0,     -0.00,  0.08,  0.09]
       data: [
         ["2019-3-16", 18.4, 18.58, 18.33, 18.79, 67.0, 1, 0.04, 0.11, 0.09],
         ["2019-3-19", 18.56, 18.25, 18.19, 18.56, 55.0, 0, -0.0, 0.08, 0.09],
@@ -46,68 +45,33 @@ export default {
         ["2019-4-25", 17.85, 17.73, 17.56, 17.85, 66.0, 0, -0.03, 0.09, 0.11],
         ["2019-4-26", 17.79, 17.53, 17.5, 17.92, 63.0, 0, -0.1, 0.06, 0.11],
         ["2019-4-27", 17.51, 17.04, 16.9, 17.51, 67.0, 0, -0.16, 0.05, 0.13],
-        ["2019-4-30", 17.07, 17.2, 16.98, 17.32, 55.0, 0, -0.12, 0.09, 0.15],
-        ["2019-5-01", 17.28, 17.11, 16.91, 17.28, 39.0, 0, -0.09, 0.12, 0.16],
-        ["2019-5-02", 17.13, 17.91, 17.05, 17.99, 102.0, 0, -0.01, 0.17, 0.18],
-        ["2019-5-03", 17.8, 17.78, 17.61, 17.98, 71.0, 0, -0.09, 0.14, 0.18],
-        ["2019-5-04", 17.6, 17.25, 17.13, 17.69, 51.0, 0, -0.18, 0.1, 0.19],
-        ["2019-5-07", 17.2, 17.39, 17.15, 17.45, 43.0, 0, -0.19, 0.12, 0.22],
-        ["2019-5-08", 17.3, 17.42, 17.18, 17.62, 45.0, 0, -0.23, 0.13, 0.24],
-        ["2019-5-09", 17.33, 17.39, 17.32, 17.59, 44.0, 0, -0.29, 0.13, 0.28],
-        ["2019-5-10", 17.39, 17.26, 17.21, 17.65, 44.0, 0, -0.37, 0.13, 0.32],
-        ["2019-5-11", 17.23, 16.92, 16.66, 17.26, 114.0, 1, -0.44, 0.15, 0.37],
-        ["2019-5-14", 16.75, 17.06, 16.5, 17.09, 94.0, 0, -0.44, 0.21, 0.44],
-        ["2019-5-15", 17.03, 17.03, 16.9, 17.06, 46.0, 0, -0.44, 0.28, 0.5],
-        ["2019-5-16", 17.08, 16.96, 16.87, 17.09, 30.0, 0, -0.4, 0.36, 0.56],
-        ["2019-5-17", 17.0, 17.1, 16.95, 17.12, 50.0, 0, -0.3, 0.47, 0.62],
-        ["2019-5-18", 17.09, 17.52, 17.04, 18.06, 156.0, 0, -0.14, 0.59, 0.66],
-        ["2019-5-21", 17.43, 18.23, 17.35, 18.45, 152.0, 1, 0.02, 0.69, 0.68],
-        ["2019-5-22", 18.14, 18.27, 18.06, 18.32, 94.0, 0, 0.08, 0.72, 0.68],
-        ["2019-5-23", 18.28, 18.19, 18.17, 18.71, 108.0, 0, 0.13, 0.73, 0.67],
-        ["2019-5-24", 18.18, 18.14, 18.01, 18.31, 37.0, 0, 0.19, 0.74, 0.65],
-        ["2019-5-25", 18.22, 18.33, 18.2, 18.36, 48.0, 0, 0.26, 0.75, 0.62],
-        ["2019-5-28", 18.35, 17.84, 17.8, 18.39, 48.0, 0, 0.27, 0.72, 0.59],
-        ["2019-5-29", 17.83, 17.94, 17.71, 17.97, 36.0, 0, 0.36, 0.73, 0.55],
-        ["2019-5-30", 17.9, 18.26, 17.55, 18.3, 71.0, 1, 0.43, 0.71, 0.5],
-        ["2019-5-31", 18.12, 17.99, 17.91, 18.33, 72.0, 0, 0.4, 0.63, 0.43],
-        ["2019-6-04", 17.91, 17.28, 17.16, 17.95, 37.0, 1, 0.34, 0.55, 0.38],
-        ["2019-6-05", 17.17, 17.23, 17.0, 17.55, 51.0, 0, 0.37, 0.51, 0.33],
-        ["2019-6-06", 17.2, 17.31, 17.06, 17.33, 31.0, 0, 0.37, 0.46, 0.28],
-        ["2019-6-07", 17.15, 16.67, 16.51, 17.15, 19.0, 0, 0.3, 0.37, 0.22],
-        ["2019-6-08", 16.8, 16.81, 16.61, 17.06, 60.0, 0, 0.29, 0.32, 0.18],
-        ["2019-6-11", 16.68, 16.04, 16.0, 16.68, 65.0, 0, 0.2, 0.24, 0.14],
-        ["2019-6-12", 16.03, 15.98, 15.88, 16.25, 46.0, 0, 0.2, 0.21, 0.11],
-        ["2019-6-13", 16.21, 15.87, 15.78, 16.21, 57.0, 0, 0.2, 0.18, 0.08],
-        ["2019-6-14", 15.55, 15.89, 15.52, 15.96, 42.0, 0, 0.2, 0.16, 0.05],
-        ["2019-6-15", 15.87, 15.48, 15.45, 15.92, 34.0, 1, 0.17, 0.11, 0.02],
-        ["2019-6-18", 15.39, 15.42, 15.36, 15.7, 26.0, 0, 0.21, 0.1, -0.0],
-        ["2019-6-19", 15.58, 15.71, 15.35, 15.77, 38.0, 0, 0.25, 0.09, -0.03],
-        ["2019-6-20", 15.56, 15.52, 15.24, 15.68, 38.0, 0, 0.23, 0.05, -0.07],
-        ["2019-6-21", 15.41, 15.3, 15.28, 15.68, 35.0, 0, 0.21, 0.0, -0.1],
-        ["2019-6-22", 15.48, 15.28, 15.13, 15.49, 30.0, 0, 0.21, -0.02, -0.13],
-        ["2019-6-25", 15.29, 15.48, 15.2, 15.49, 21.0, 0, 0.2, -0.06, -0.16],
-        ["2019-6-26", 15.33, 14.86, 14.78, 15.39, 30.0, 0, 0.12, -0.13, -0.19],
-        ["2019-6-27", 14.96, 15.0, 14.84, 15.22, 51.0, 0, 0.13, -0.14, -0.2],
-        ["2019-6-28", 14.96, 14.72, 14.62, 15.06, 25.0, 0, 0.1, -0.17, -0.22],
-        ["2019-6-29", 14.75, 14.99, 14.62, 15.08, 36.0, 0, 0.13, -0.17, -0.24],
-        ["2019-7-01", 14.98, 14.72, 14.48, 15.18, 27.0, 0, 0.1, -0.21, -0.26],
-        ["2019-7-02", 14.65, 14.85, 14.65, 14.95, 18.0, 0, 0.11, -0.21, -0.27],
-        ["2019-7-03", 14.72, 14.67, 14.55, 14.8, 23.0, 0, 0.1, -0.24, -0.29],
-        ["2019-7-04", 14.79, 14.88, 14.69, 14.93, 22.0, 0, 0.13, -0.24, -0.3],
-        ["2019-7-05", 14.9, 14.86, 14.78, 14.93, 16.0, 0, 0.12, -0.26, -0.32],
-        ["2019-7-15", 14.5, 14.66, 14.47, 14.82, 19.0, 0, 0.11, -0.28, -0.34],
-        ["2019-7-16", 14.77, 14.94, 14.72, 15.05, 26.0, 0, 0.14, -0.28, -0.35],
-        ["2019-7-17", 14.95, 15.03, 14.88, 15.07, 38.0, 0, 0.12, -0.31, -0.37],
-        ["2019-7-18", 14.95, 14.9, 14.87, 15.06, 28.0, 0, 0.07, -0.35, -0.39],
-        ["2019-7-19", 14.9, 14.75, 14.68, 14.94, 22.0, 0, 0.03, -0.38, -0.4],
-        ["2019-7-22", 14.88, 15.01, 14.79, 15.11, 38.0, 1, 0.01, -0.4, -0.4],
-        ["2019-7-23", 15.01, 14.83, 14.72, 15.01, 24.0, 0, -0.09, -0.45, -0.4]
-      ]
+        ["2019-4-30", 17.07, 17.2, 16.98, 17.32, 55.0, 0, -0.12, 0.09, 0.15]
+      ],
+      data0: "", // 处理过的数据
+      kColor: {
+        up: '#e32350',
+        down: '#1db9bb'
+      },
+      maColor: {
+        ma5: '#4698cd',
+        ma10: '#ead15e',
+        ma20: '#d84799',
+        ma30: '#2f6e72'
+      },
+      macdColor: {
+        MACD: '',
+        dea: '#7b0f2f',
+        dif: '#0f59af'
+      },
     }
   },
   mounted() {
-    var data0 = splitData(this.data);
-    function splitData(rawData) { // macd计算
+    this.data0 = this.splitData(this.data);
+    this.drawLine(this.data0);
+  },
+  methods: {
+    /*数据初步处理*/
+    splitData: function(rawData) {
       var categoryData = [];    // 日期 
       var values = [];          // 除去日期的数组集合     
       var macds = [];           // macd
@@ -127,23 +91,27 @@ export default {
         difs: difs,
         deas: deas
       };
-    }
-    
-    function calculateMA(dayCount) { // ma 均线函数
+    },
+
+    /*ma 均线函数:
+    * 计算公式：dayCount 天的收盘价总和 / dayCount
+    */ 
+    calculateMA: function(dayCount) {
       var result = [];
-      for (var i = 0, len = data0.values.length; i < len; i++) {
+      for (var i = 0, len = this.data0.values.length; i < len; i++) {
         if (i < dayCount) {
           result.push("-");
           continue;
         }
         var sum = 0;
         for (var j = 0; j < dayCount; j++) {
-          sum += data0.values[i - j][1];
+          sum += this.data0.values[i - j][1];
         }
         result.push(sum / dayCount);
       }
       return result;
-    }
+    },
+    
     /* 指定图表的配置项和数据
       1、tooltip: 提示框组件
         trigger：触发类型 axis(坐标轴触发，主要在柱状图，折线图等会使用类目轴的图表中使用)
@@ -163,204 +131,184 @@ export default {
             splitArea: 坐标轴在 grid 区域中的分隔区域
             position:  轴的位置
       5、series：画线
-          type: 画线类型(line: 折线图; bar: 柱状图;)  
-          itemStyle：折线拐点标志的样式  lineStyle：线条样式
+          type: 画线类型(candlestick: K线图)  
+          data：数据 [open, close, lowest, highest] 即：[开盘值, 收盘值, 最低值, 最高值]
+          type: 画线类型(line: 折线图)  
+          symbol: 标记的图形
     */ 
-    var option = {
-      tooltip: {    
-        trigger: "axis",
-        axisPointer: {
-          type: "cross"
-        }
-      },
-      grid: [
-        {                // K线 区域设置
-          left: "4%",
-          top: "2%",
-          height: "70%"
-        },
-        // {               // macd 区域设置          
-        //   left: "3%",
-        //   right: "10%",
-        //   top: "80%",
-        //   height: "10%"
-        // }
-      ],
-      xAxis: [
-        {
-          type: "category",
-          data: data0.categoryData,
-          axisLine: {
-            show: false,
-            lineStyle: {
-              color: "red"
-            }
+    drawLine: function(data0) {
+      var option = {
+        tooltip: {    
+          trigger: "axis",
+          axisPointer: {
+            type: "cross"
           }
         },
-        // {
-        //   type: "category",
-        //   gridIndex: 1,
-        //   data: data0.categoryData,
-        //   axisLabel: { show: false }
-        // }
-      ],
-      yAxis: [
-        {
-          scale: true,
-          // splitArea: {
-          //   show: true
-          // },
-          axisLine: {
-            lineStyle: {
-              color: "red"
-            }
-          }
-        },
-        // {
-        //   gridIndex: 1,
-        //   splitNumber: 3,
-        //   axisLine: { onZero: false },
-        //   axisTick: { show: false },
-        //   splitLine: { show: false },
-        //   axisLabel: { show: true },
-        //   axisLine: {
-        //     lineStyle: {
-        //       color: "red"
-        //     }
-        //   },
-        //   position: "right"
-        // }
-      ],
-      dataZoom: [
-        {
-          type: "inside",
-          start: 100,
-          end: 80
-        },
-        // {
-        //   show: true,
-        //   type: "slider",
-        //   y: "90%",
-        //   start: 50,
-        //   end: 100
-        // },
-        // {
-        //   show: false,
-        //   xAxisIndex: [0, 1],
-        //   type: "slider",
-        //   start: 20,
-        //   end: 100
-        // }
-      ],
-      series: [
-        {
-          name: "555",
-          type: "candlestick",
-          data: data0.values,
-          markPoint: {
-            data: [
-              {
-                name: "XX标点"
-              }
-            ]
+        grid: [
+          {                                 // K线 区域设置
+            top: '2%',
+            left: '8%',
+            right: '8%',
+            height: '51.9%'                 // 410 / 790
           },
-          markLine: {
-            silent: true,
-            data: [
-              {
-                yAxis: 2222
-              }
-            ]
+          {                                 // macd 区域设置          
+            left: "8%",
+            right: "8%",
+            top: '81.9%',
+            height: "18.1%"                 // 143 / 790  
           }
-        },
-        // {
-        //   name: "MA5",
-        //   type: "line",
-        //   data: calculateMA(5),
-        //   smooth: true,
-        //   lineStyle: {
-        //     normal: {
-        //       opacity: 0.5
-        //     }
-        //   }
-        // },
-        // {
-        //   name: "MA10",
-        //   type: "line",
-        //   data: calculateMA(10),
-        //   smooth: true,
-        //   lineStyle: {
-        //     normal: {
-        //       opacity: 0.5
-        //     }
-        //   }
-        // },
-        // {
-        //   name: "MA20",
-        //   type: "line",
-        //   data: calculateMA(20),
-        //   smooth: true,
-        //   lineStyle: {
-        //     normal: {
-        //       opacity: 0.5
-        //     }
-        //   }
-        // },
-        // {
-        //   name: "MA30",
-        //   type: "line",
-        //   data: calculateMA(30),
-        //   smooth: true,
-        //   lineStyle: {
-        //     normal: {
-        //       opacity: 0.5
-        //     }
-        //   }
-        // },
-        // {
-        //   name: "MACD",
-        //   type: "bar",
-        //   xAxisIndex: 1,
-        //   yAxisIndex: 1,
-        //   data: data0.macds,
-        //   itemStyle: {
-        //     normal: {
-        //       color: function(params) {
-        //         var colorList;
-        //         if (params.data >= 0) {
-        //           colorList = "#ef232a";
-        //         } else {
-        //           colorList = "#14b143";
-        //         }
-        //         return colorList;
-        //       }
-        //     }
-        //   }
-        // },
-        // {
-        //   name: "DIF",
-        //   type: "line",
-        //   xAxisIndex: 1,
-        //   yAxisIndex: 1,
-        //   data: data0.difs
-        // },
-        // {
-        //   name: "DEA",
-        //   type: "line",
-        //   xAxisIndex: 1,
-        //   yAxisIndex: 1,
-        //   data: data0.deas
-        // }
-      ]
-    };
-    // 初始化
-    var charts = echarts.init(this.$refs.echartContainer);
-    charts.setOption(option);
+        ],
+        xAxis: [
+          {                               // x 轴             
+            type: "category",
+            data: data0.categoryData,
+            axisLine: {
+              show: false,
+              lineStyle: {
+                color: "red"
+              }
+            }
+          },
+          {
+            type: "category",
+            gridIndex: 1,
+            data: data0.categoryData,
+          }
+        ],
+        yAxis: [
+          {                            // y 轴 
+            scale: true,
+            splitLine: {
+              lineStyle: {
+                color: ['#243966']
+              }
+            },
+            splitArea: {
+              show: true,
+              areaStyle:{
+                color:['#08112c']
+              }
+            },
+            axisLine: {
+              lineStyle: {
+                color: "red"
+              }
+            }
+          },
+          {
+            gridIndex: 1,
+            splitNumber: 3,
+            axisLine: { onZero: false },
+            axisTick: { show: false },
+            splitLine: { show: false },
+            axisLabel: { show: true },
+            axisLine: {
+              lineStyle: {
+                color: "red"
+              }
+            },
+            position: "right"
+          }
+        ],
+        series: [
+          {                               // K线
+            type: "candlestick",
+            data: data0.values,
+            itemStyle: {
+              color: this.kColor.up,     
+              color0: this.kColor.down,
+              borderColor: null,
+              borderColor0: null
+            }
+          },
+          {
+            name: "MA5",
+            type: "line",
+            data: this.calculateMA(5),
+            symbol: "none",
+            lineStyle: {
+              color: this.maColor.ma5,
+              opacity: 0.5
+            }
+          },
+          {
+            name: "MA10",
+            type: "line",
+            data: this.calculateMA(10),
+            symbol: "none",
+            lineStyle: {
+              color: this.maColor.ma10,
+              opacity: 0.5
+            }
+          },
+          {
+            name: "MA20",
+            type: "line",
+            data: this.calculateMA(20),
+            symbol: "none",
+            lineStyle: {
+              color: this.maColor.ma20,
+              opacity: 0.5
+            }
+          },
+          {
+            name: "MA30",
+            type: "line",
+            data: this.calculateMA(30),
+            symbol: "none",
+            lineStyle: {
+              color: this.maColor.ma30,
+              opacity: 0.5
+            }
+          },
+          {
+            name: "MACD",
+            type: "bar",
+            xAxisIndex: 1,
+            yAxisIndex: 1,
+            data: data0.macds,
+            itemStyle: {
+              normal: {
+                color: function(params) {
+                  var colorList;
+                  if (params.data >= 0) {
+                    colorList = "#ef232a";
+                  } else {
+                    colorList = "#14b143";
+                  }
+                  return colorList;
+                }
+              }
+            }
+          },
+          {
+            name: "DIF",
+            type: "line",
+            xAxisIndex: 1,
+            yAxisIndex: 1,
+            data: data0.difs
+          },
+          {
+            name: "DEA",
+            type: "line",
+            xAxisIndex: 1,
+            yAxisIndex: 1,
+            data: data0.deas
+          }
+        ]
+      };
+      // 初始化
+      var charts = this.$echarts.init(this.$refs.echartContainer);
+      charts.setOption(option);
+    }
   }
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-
+  #echartContainer{
+    width:100%; 
+    height: 10.5333rem /* 790/75 */;
+  }
 </style>
