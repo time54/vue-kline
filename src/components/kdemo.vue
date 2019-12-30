@@ -121,12 +121,10 @@ export default {
       3、xAxis： 直角坐标系 grid 中的 x 轴
             type: 坐标轴类型(默认类目轴: category) 
             data: 类目数据，数组形式
-            axisLabel: 坐标轴刻度标签的相关设置  
             axisLine:  坐标轴轴线相关设置  
             axisTick： 坐标轴刻度相关设置
+            axisLabel: 坐标轴刻度标签的相关设置 
       4、yAxis： 直角坐标系 grid 中的 y 轴
-            interval：强制设置坐标轴分割间隔
-            axisLine:  坐标轴轴线相关设置  
             splitLine：坐标轴在 grid 区域中的分隔线
             splitArea: 坐标轴在 grid 区域中的分隔区域
             position:  轴的位置
@@ -155,29 +153,51 @@ export default {
             left: "8%",
             right: "8%",
             top: '81.9%',
-            height: "18.1%"                 // 143 / 790  
+            bottom: '2%',
+            height: "16.1%"                 // 143 / 790  
           }
         ],
         xAxis: [
           {                               // x 轴             
             type: "category",
             data: data0.categoryData,
-            axisLine: {
-              show: false,
-              lineStyle: {
-                color: "red"
-              }
+            axisTick: {
+              show: false
+            },
+            axisLabel: {
+              show: false
             }
           },
           {
             type: "category",
             gridIndex: 1,
             data: data0.categoryData,
+            axisLine: {
+              lineStyle: {
+                color: "#243966"
+              }
+            },
+            axisTick: {
+              show: false
+            }
           }
         ],
-        yAxis: [
-          {                            // y 轴 
+        yAxis: [                               // y 轴 
+          {          
             scale: true,
+            axisLine: {
+              show: false,
+              lineStyle: {
+                color: "red"
+              }
+            },
+            axisTick: {
+              show: false
+            },
+            axisLabel: {
+              inside: true,
+              margin: 0
+            },
             splitLine: {
               lineStyle: {
                 color: ['#243966']
@@ -188,30 +208,39 @@ export default {
               areaStyle:{
                 color:['#08112c']
               }
-            },
-            axisLine: {
-              lineStyle: {
-                color: "red"
-              }
             }
           },
           {
             gridIndex: 1,
-            splitNumber: 3,
-            axisLine: { onZero: false },
-            axisTick: { show: false },
-            splitLine: { show: false },
-            axisLabel: { show: true },
+            splitNumber: 2,
             axisLine: {
+              show: false,
               lineStyle: {
                 color: "red"
               }
             },
-            position: "right"
+            axisTick: {
+              show: false
+            },
+            axisLabel: {
+              inside: true,
+              margin: 0
+            },
+            splitLine: {
+              lineStyle: {
+                color: ['#243966']
+              }
+            },
+            splitArea: {
+              show: true,
+              areaStyle:{
+                color:['#08112c']
+              }
+            }
           }
         ],
         series: [
-          {                               // K线
+          {                                    // K线
             type: "candlestick",
             data: data0.values,
             itemStyle: {
@@ -221,7 +250,7 @@ export default {
               borderColor0: null
             }
           },
-          {
+          {                                   // ma5线              
             name: "MA5",
             type: "line",
             data: this.calculateMA(5),
@@ -231,7 +260,7 @@ export default {
               opacity: 0.5
             }
           },
-          {
+          {                                    // ma10线   
             name: "MA10",
             type: "line",
             data: this.calculateMA(10),
@@ -241,7 +270,7 @@ export default {
               opacity: 0.5
             }
           },
-          {
+          {                                    // ma20线   
             name: "MA20",
             type: "line",
             data: this.calculateMA(20),
@@ -251,7 +280,7 @@ export default {
               opacity: 0.5
             }
           },
-          {
+          {                                     // ma30线   
             name: "MA30",
             type: "line",
             data: this.calculateMA(30),
@@ -261,7 +290,7 @@ export default {
               opacity: 0.5
             }
           },
-          {
+          {                                     // MACD   
             name: "MACD",
             type: "bar",
             xAxisIndex: 1,
@@ -272,28 +301,39 @@ export default {
                 color: function(params) {
                   var colorList;
                   if (params.data >= 0) {
-                    colorList = "#ef232a";
+                    colorList = '#e32350';
                   } else {
-                    colorList = "#14b143";
+                    colorList = '#1db9bb';
                   }
                   return colorList;
                 }
               }
-            }
+            },
+            barWidth: 1
           },
           {
             name: "DIF",
             type: "line",
             xAxisIndex: 1,
             yAxisIndex: 1,
-            data: data0.difs
+            data: data0.difs,
+            symbol: "none",
+            lineStyle: {
+              color: this.macdColor.dif,
+              opacity: 0.5
+            }
           },
           {
             name: "DEA",
             type: "line",
             xAxisIndex: 1,
             yAxisIndex: 1,
-            data: data0.deas
+            data: data0.deas,
+            symbol: "none",
+            lineStyle: {
+              color: this.macdColor.dea,
+              opacity: 0.5
+            }
           }
         ]
       };
