@@ -73,20 +73,23 @@ export default {
     /*数据初步处理*/
     splitData: function(rawData) {
       var categoryData = [];    // 日期 
-      var values = [];          // 除去日期的数组集合     
+      var values = [];          // 除去日期的数组集合
+      var vol = [];             // 成交量     
       var macds = [];           // macd
       var difs = [];            // dif
       var deas = [];            // dea
       for (var i=0; i<rawData.length; i++) {
         categoryData.push(rawData[i].splice(0, 1)[0]);
         values.push(rawData[i]);
-        macds.push(rawData[i][6]);
+        vol.push([i, rawData[i][4], rawData[i][0] > rawData[i][1] ? 1 : -1]);
+        macds.push([i, rawData[i][6], rawData[i][6] < 0 ? 1 : -1]);
         difs.push(rawData[i][7]);
         deas.push(rawData[i][8]);
       }
       return {
         categoryData: categoryData,
         values: values,
+        vol: vol,
         macds: macds,
         difs: difs,
         deas: deas
@@ -142,19 +145,37 @@ export default {
             type: "cross"
           }
         },
+        visualMap: {
+          show: false,
+          seriesIndex: [5,6],
+          dimension: 2,
+          pieces: [{
+              value: 1,
+              color: this.kColor.down
+          }, {
+              value: -1,
+              color: this.kColor.up
+          }]
+        },
         grid: [
           {                                 // K线 区域设置
             top: '2%',
             left: '8%',
             right: '8%',
-            height: '51.9%'                 // 410 / 790
+            height: '52%'                  // 410 / 790
+          },
+          {                                 // 成交量 区域设置          
+            left: "8%",
+            right: "8%",
+            top: '54%',
+            height: "24%"                  // 147 / 790  
           },
           {                                 // macd 区域设置          
             left: "8%",
             right: "8%",
-            top: '81.9%',
+            top: '76%',
             bottom: '2%',
-            height: "16.1%"                 // 143 / 790  
+            height: "24%"                 // 143 / 790  
           }
         ],
         xAxis: [
@@ -171,6 +192,17 @@ export default {
           {
             type: "category",
             gridIndex: 1,
+            data: data0.categoryData,
+            axisLabel: {
+              show: false
+            },
+            axisTick: {
+              show: false
+            }
+          },
+          {
+            type: "category",
+            gridIndex: 2,
             data: data0.categoryData,
             axisLine: {
               lineStyle: {
@@ -213,6 +245,24 @@ export default {
           {
             gridIndex: 1,
             splitNumber: 2,
+            axisLine: { show: false },
+            axisTick: { show: false },
+            axisLabel: { show: false },
+            splitLine: {
+              lineStyle: {
+                color: ['#243966']
+              }
+            },
+            splitArea: {
+              show: true,
+              areaStyle:{
+                color:['#08112c']
+              }
+            }
+          },
+          {
+            gridIndex: 2,
+            splitNumber: 2,
             axisLine: {
               show: false,
               lineStyle: {
@@ -247,7 +297,7 @@ export default {
               color: this.kColor.up,     
               color0: this.kColor.down,
               borderColor: null,
-              borderColor0: null
+              borderColor0: null,
             }
           },
           {                                   // ma5线              
@@ -290,32 +340,26 @@ export default {
               opacity: 0.5
             }
           },
+          {                                     // 成交量
+            name: 'Volume',
+            type: 'bar',
+            xAxisIndex: 1,
+            yAxisIndex: 1,
+            data: data0.vol,
+          },
           {                                     // MACD   
             name: "MACD",
             type: "bar",
-            xAxisIndex: 1,
-            yAxisIndex: 1,
+            xAxisIndex: 2,
+            yAxisIndex: 2,
             data: data0.macds,
-            itemStyle: {
-              normal: {
-                color: function(params) {
-                  var colorList;
-                  if (params.data >= 0) {
-                    colorList = '#e32350';
-                  } else {
-                    colorList = '#1db9bb';
-                  }
-                  return colorList;
-                }
-              }
-            },
             barWidth: 1
           },
           {
             name: "DIF",
             type: "line",
-            xAxisIndex: 1,
-            yAxisIndex: 1,
+            xAxisIndex: 2,
+            yAxisIndex: 2,
             data: data0.difs,
             symbol: "none",
             lineStyle: {
@@ -326,8 +370,8 @@ export default {
           {
             name: "DEA",
             type: "line",
-            xAxisIndex: 1,
-            yAxisIndex: 1,
+            xAxisIndex: 2,
+            yAxisIndex: 2,
             data: data0.deas,
             symbol: "none",
             lineStyle: {
